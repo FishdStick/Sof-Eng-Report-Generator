@@ -15,6 +15,8 @@ public class addEntry extends javax.swing.JFrame {
      */
     public addEntry() {
         initComponents();
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
