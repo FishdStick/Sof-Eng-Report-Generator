@@ -76,6 +76,11 @@ public class main extends javax.swing.JFrame {
         refreshTable.setToolTipText("");
 
         viewAuditTrail.setText("Audit Log");
+        viewAuditTrail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewAuditTrailActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,9 +135,16 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_updateEntryActionPerformed
 
     private void addEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEntryActionPerformed
-       
+        
         new addEntry().setVisible(true);
+        
     }//GEN-LAST:event_addEntryActionPerformed
+
+    private void viewAuditTrailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAuditTrailActionPerformed
+        
+        new auditLog().setVisible(true);
+        
+    }//GEN-LAST:event_viewAuditTrailActionPerformed
 
 
     public static void main(String args[]) {
