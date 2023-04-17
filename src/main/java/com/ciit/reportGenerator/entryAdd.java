@@ -21,7 +21,7 @@ public class entryAdd extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         Connect();
-        entryDate.setTextField(dateEntryTxt);
+        entryDate.setTextField(dateTxt);
         entryDate.setLabelCurrentDayVisible(false);
         entryDate.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
     }
@@ -55,14 +55,14 @@ public class entryAdd extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         idTxt = new javax.swing.JTextField();
-        dateEntryTxt = new javax.swing.JTextField();
+        dateTxt = new javax.swing.JTextField();
         amtTxt = new javax.swing.JTextField();
         descTxt = new javax.swing.JFormattedTextField();
         entryAddBtn = new javax.swing.JButton();
         clearTxtBtn = new javax.swing.JButton();
         accountTypeCbox = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ID");
 
@@ -98,15 +98,15 @@ public class entryAdd extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(58, 58, 58)
                         .addComponent(entryAddBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(35, 35, 35)
                         .addComponent(clearTxtBtn))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel5)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(dateEntryTxt))
+                            .addComponent(dateTxt))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -135,7 +135,7 @@ public class entryAdd extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(dateEntryTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -159,28 +159,32 @@ public class entryAdd extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void entryAddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryAddBtnActionPerformed
-         
-        try {
+        
+        int response = JOptionPane.showConfirmDialog(this, "Do you want to Add this record?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (response == JOptionPane.YES_OPTION){ 
             
-            String id = idTxt.getText();
-            String date = dateEntryTxt.getText();
-            String amount = amtTxt.getText();
-            String account = accountTypeCbox.getSelectedItem().toString();
-            String desc = descTxt.getText();
+            try {
             
-            pstInsert = con.prepareStatement("INSERT INTO accounts (ID, date, amount, account_Type, description)VALUES(?,?,?,?,?)");
-            pstInsert.setString(1, id);
-            pstInsert.setString(2, date);
-            pstInsert.setString(3, amount);
-            pstInsert.setString(4, account);
-            pstInsert.setString(5, desc);
+                String id = idTxt.getText();
+                String date = dateTxt.getText();
+                String amount = amtTxt.getText();
+                String account = accountTypeCbox.getSelectedItem().toString();
+                String desc = descTxt.getText();
+            
+                pstInsert = con.prepareStatement("INSERT INTO accounts (ID, date, amount, account_Type, description)VALUES(?,?,?,?,?)");
+                pstInsert.setString(1, id);
+                pstInsert.setString(2, date);
+                pstInsert.setString(3, amount);
+                pstInsert.setString(4, account);
+                pstInsert.setString(5, desc);
             
                 int x = pstInsert.executeUpdate();
         
                     if (x==1){
                         JOptionPane.showMessageDialog(this, "Record Added Successfully!");
                         idTxt.setText("");
-                        dateEntryTxt.setText("");
+                        dateTxt.setText("");
                         amtTxt.setText("");
                         descTxt.setText("");
                         
@@ -188,17 +192,21 @@ public class entryAdd extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Record was not Added!");
                     }
         
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex);
-        }
-        
-
-        
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex);
+            }
+            
+        }else if(response == JOptionPane.NO_OPTION){
+                
+        } 
 
     }//GEN-LAST:event_entryAddBtnActionPerformed
 
     private void clearTxtBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearTxtBtnActionPerformed
-        // TODO add your handling code here:
+        idTxt.setText("");
+        dateTxt.setText("");
+        amtTxt.setText("");
+        descTxt.setText("");
     }//GEN-LAST:event_clearTxtBtnActionPerformed
 
     /**
@@ -241,7 +249,7 @@ public class entryAdd extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> accountTypeCbox;
     private javax.swing.JTextField amtTxt;
     private javax.swing.JButton clearTxtBtn;
-    private javax.swing.JTextField dateEntryTxt;
+    private javax.swing.JTextField dateTxt;
     private javax.swing.JFormattedTextField descTxt;
     private javax.swing.JButton entryAddBtn;
     private javax.swing.JTextField idTxt;

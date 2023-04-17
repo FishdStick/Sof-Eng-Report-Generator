@@ -4,6 +4,15 @@
  */
 package com.ciit.reportGenerator;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Mikel
@@ -14,7 +23,41 @@ public class entryDelete extends javax.swing.JFrame {
      * Creates new form deleteEntry
      */
     public entryDelete() {
+        
         initComponents();
+        
+        Connect();
+        LoadID();
+        
+    }
+    
+   Connection con;
+    PreparedStatement pstDelete;
+    PreparedStatement pstLoadData;
+    ResultSet rs;
+    public void Connect(){
+
+        try { 
+          con = DriverManager.getConnection("jdbc:mysql://localhost/inex","root","");
+        } catch (SQLException ex) {
+            Logger.getLogger(entryAdd.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void LoadID(){
+        
+        try {
+            pstLoadData = con.prepareStatement("SELECT ID FROM accounts");
+            rs = pstLoadData.executeQuery();
+            idCbox.removeAllItems();
+            while(rs.next()){
+                idCbox.addItem(rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(entryUpdate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**
@@ -26,21 +69,85 @@ public class entryDelete extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        idCbox = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        entryDeleteBtn = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel1.setText("ID");
+
+        entryDeleteBtn.setText("Delete Entry");
+        entryDeleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                entryDeleteBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(idCbox, 0, 229, Short.MAX_VALUE)
+                .addGap(50, 50, 50))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(124, 124, 124)
+                .addComponent(entryDeleteBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(idCbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(entryDeleteBtn)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void entryDeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryDeleteBtnActionPerformed
+        
+        int response = JOptionPane.showConfirmDialog(this, "Do you want to Delete this record?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (response == JOptionPane.YES_OPTION){
+            
+            try {
+            
+                String id = idCbox.getSelectedItem().toString();
+
+                pstDelete = con.prepareStatement("DELETE FROM accounts WHERE ID=?");
+                pstDelete.setString(1, id);
+
+                int x = pstDelete.executeUpdate();
+            
+                    if (x==1){
+                
+                        JOptionPane.showMessageDialog(this, "Record Deleted Successfully!");
+                        LoadID();
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(this, "Record was not Deleted!");
+
+                    } 
+   
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex);
+            }
+            
+        }else if(response == JOptionPane.NO_OPTION){
+                
+        }    
+    }//GEN-LAST:event_entryDeleteBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +186,8 @@ public class entryDelete extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton entryDeleteBtn;
+    private javax.swing.JComboBox<String> idCbox;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
