@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -36,6 +36,8 @@
                       <Component id="refreshTable" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="exportToExcel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <Component id="highlightCells" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="viewAuditTrail" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -72,6 +74,7 @@
                   <Component id="refreshTable" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="exportToExcel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="viewAuditTrail" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="highlightCells" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="123" max="32767" attributes="0"/>
           </Group>
@@ -167,6 +170,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Export"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportToExcelActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="refreshTable">
       <Properties>
@@ -191,6 +197,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Date Range"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="highlightCells">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Higlight"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="highlightCellsActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

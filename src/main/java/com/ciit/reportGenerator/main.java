@@ -11,7 +11,27 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-
+import java.io.*;
+import java.util.Iterator;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
+import javax.xml.crypto.Data;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
  *
  * @author Mikel
@@ -79,6 +99,33 @@ public class main extends javax.swing.JFrame {
         }
     }
 
+    private void Export(JTable table, File file){
+        
+        TableModel m = accounts.getModel();
+        
+        try {
+            
+            FileWriter fw = new FileWriter(file);
+            for (int i = 0; i<m.getColumnCount(); i++){
+                
+                fw.write(m.getColumnName(i)+"\t");
+                
+            }
+            fw.write("\n");
+            
+            for (int i = 0; i<m.getRowCount(); i++){
+                for (int j = 0; j<m.getColumnCount(); j++){
+                    fw.write(m.getValueAt(i,j).toString()+"\t");
+                }
+                fw.write("\n");
+            }
+            fw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -94,6 +141,7 @@ public class main extends javax.swing.JFrame {
         viewAuditTrail = new javax.swing.JButton();
         dateText = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        highlightCells = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,6 +191,11 @@ public class main extends javax.swing.JFrame {
         });
 
         exportToExcel.setText("Export");
+        exportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportToExcelActionPerformed(evt);
+            }
+        });
 
         refreshTable.setText("Refresh");
         refreshTable.setToolTipText("");
@@ -161,6 +214,13 @@ public class main extends javax.swing.JFrame {
 
         jLabel2.setText("Date Range");
 
+        highlightCells.setText("Higlight");
+        highlightCells.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                highlightCellsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,6 +238,8 @@ public class main extends javax.swing.JFrame {
                         .addComponent(refreshTable)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(exportToExcel)
+                        .addGap(12, 12, 12)
+                        .addComponent(highlightCells)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(viewAuditTrail))
                     .addComponent(jLabel1)
@@ -207,7 +269,8 @@ public class main extends javax.swing.JFrame {
                     .addComponent(deleteEntry)
                     .addComponent(refreshTable)
                     .addComponent(exportToExcel)
-                    .addComponent(viewAuditTrail))
+                    .addComponent(viewAuditTrail)
+                    .addComponent(highlightCells))
                 .addContainerGap(123, Short.MAX_VALUE))
         );
 
@@ -233,6 +296,73 @@ public class main extends javax.swing.JFrame {
     private void refreshTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshTableActionPerformed
         FetchData();
     }//GEN-LAST:event_refreshTableActionPerformed
+
+    private void exportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportToExcelActionPerformed
+        
+        JFileChooser jChoose = new JFileChooser();
+        int option = jChoose.showSaveDialog(main.this);
+        
+            if(option == JFileChooser.APPROVE_OPTION){
+                
+                String name = jChoose.getSelectedFile().getName();
+                String path = jChoose.getSelectedFile().getParentFile().getPath();
+                String file = path + "\\" + name + ".xls";
+
+                Export(accounts, new File(file));
+ 
+            }
+    }//GEN-LAST:event_exportToExcelActionPerformed
+
+    private void highlightCellsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highlightCellsActionPerformed
+         
+        JFileChooser jChoose = new JFileChooser();
+        int option = jChoose.showOpenDialog(main.this);
+        
+            if(option == JFileChooser.APPROVE_OPTION){
+                
+                File file = jChoose.getSelectedFile();
+                
+                try{
+                    
+                    FileInputStream fileIn = new FileInputStream(file);
+                    
+                    XSSFWorkbook wb = new XSSFWorkbook(fileIn);
+                    XSSFSheet sheet = wb.getSheetAt(0);
+                    //Note: If you want to use different cellstyles, declare different cellstyles
+                    XSSFCellStyle income = wb.createCellStyle();
+                    XSSFCellStyle expense = wb.createCellStyle();   
+                    Iterator <Row> rowIterator = sheet.iterator();
+                   
+                    while (rowIterator.hasNext()){
+                        
+                        Row row = rowIterator.next();
+                        Cell cell = row.getCell(3);
+                        
+                            if(cell.toString().equals("Income")){
+                                income.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
+                                income.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                cell.setCellStyle(income);
+                                
+                            }else if(cell.toString().equals("Expense")){
+                                expense.setFillForegroundColor(IndexedColors.RED.getIndex());
+                                expense.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                cell.setCellStyle(expense);
+                                
+                            }
+
+                    }
+     
+                        FileOutputStream fileOut = new FileOutputStream(file);
+                        wb.write(fileOut);
+                        wb.close();
+                        fileOut.close();
+                        
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+        }
+   
+    }//GEN-LAST:event_highlightCellsActionPerformed
 
     /**
      *
@@ -279,6 +409,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField dateText;
     private javax.swing.JButton deleteEntry;
     private javax.swing.JButton exportToExcel;
+    private javax.swing.JButton highlightCells;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
