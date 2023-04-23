@@ -328,74 +328,42 @@ public class main extends javax.swing.JFrame {
                     
                     XSSFWorkbook wb = new XSSFWorkbook(fileIn);
                     XSSFSheet sheet = wb.getSheetAt(0);
-                    XSSFCellStyle cellColor = wb.createCellStyle();
-                        
+                    //Note: If you want to use different cellstyles, declare different cellstyles
+                    XSSFCellStyle income = wb.createCellStyle();
+                    XSSFCellStyle expense = wb.createCellStyle();   
                     Iterator <Row> rowIterator = sheet.iterator();
                    
                     while (rowIterator.hasNext()){
                         
                         Row row = rowIterator.next();
-                        Iterator <Cell> cellIterator = row.cellIterator();
-                        
-                        while(cellIterator.hasNext()){
-                            
-                            Cell cell = cellIterator.next();
+                        Cell cell = row.getCell(3);
                         
                             if(cell.toString().equals("Income")){
-                                cellColor.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
-                                cellColor.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                                cell.setCellStyle(cellColor);
+                                income.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
+                                income.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                cell.setCellStyle(income);
                                 
                             }else if(cell.toString().equals("Expense")){
-                                cellColor.setFillForegroundColor(IndexedColors.RED.getIndex());
-                                cellColor.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                                cell.setCellStyle(cellColor);
+                                expense.setFillForegroundColor(IndexedColors.RED.getIndex());
+                                expense.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                                cell.setCellStyle(expense);
                                 
                             }
-                        }
 
                     }
      
-                    FileOutputStream fileOut = new FileOutputStream(file);
-                    wb.write(fileOut);
-                    wb.close();
-                    fileOut.close();
+                        FileOutputStream fileOut = new FileOutputStream(file);
+                        wb.write(fileOut);
+                        wb.close();
+                        fileOut.close();
+                        
                 } catch (Exception e){
                     System.out.println(e.getMessage());
                 }
-            }
+        }
    
     }//GEN-LAST:event_highlightCellsActionPerformed
 
-//        String filename = "C:\\Users\\User\\Desktop\\ExpensesAndIncome.csv";
-//        
-//        try {
-//            FileWriter fw = new FileWriter(filename);
-//            pst = con.prepareStatement("SELECT * FROM accounts");
-//            rs = pst.executeQuery();
-//            
-//            while (rs.next()){
-//                fw.append(rs.getString(1));
-//                fw.append(",");
-//                fw.append(rs.getString(2));
-//                fw.append(",");
-//                fw.append(rs.getString(3));
-//                fw.append(",");
-//                fw.append(rs.getString(4));
-//                fw.append(",");
-//                fw.append(rs.getString(5));
-//                fw.append("\n");
-//            }
-//            JOptionPane.showMessageDialog(this, "Succesfully Exported!");
-//            
-//            fw.flush();
-//            fw.close();
-//            
-//        } catch (SQLException ex) {
-//            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IOException ex) {
-//            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     /**
      *
      * @param args
