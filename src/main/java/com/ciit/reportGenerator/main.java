@@ -294,7 +294,7 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteEntryActionPerformed
 
     private void refreshTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshTableActionPerformed
-        FetchData();
+        FetchData();    
     }//GEN-LAST:event_refreshTableActionPerformed
 
     private void exportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportToExcelActionPerformed
